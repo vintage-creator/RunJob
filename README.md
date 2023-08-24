@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <title>RunJob</title>
-</head>
-
 <body>
 
   <h1>RunJob</h1>
