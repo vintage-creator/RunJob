@@ -1,55 +1,70 @@
 const fs = require("fs");
-const multer = require("multer");
+const cronDaemon = require("node-cron");
 const path = require("path");
 const inputValidation = require("../Utils/inputValidation");
+const upload = require("../Utils/multer");
+const { processEvent } = require("../Utils/processEvent"); 
 
-// Define storage and file naming
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, "..", "uploads"), // Set your desired upload directory
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
-});
+const runJobHome = (req, res) => {
+  if (!req.isAuthenticated() && !req.session.isAuthenticated) {
+    return res.redirect("/");
+  }
+  req.flash("success", "Sign in successful!");
+  res.render("index", { flashMessages: req.flash() });
+};
 
-// Initialize multer
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1024 * 1024 * 10 }, // 10 MB limit
-});
-
-const runAppEngine = (req, res) => {
-  upload.single("cv")(req, res, (err) => {
+const runAppEngine = async (req, res) => {
+  let isFirstRun = true;
+  upload.single("cv")(req, res, async (err) => {
     if (err) {
       console.error("File upload error:", err);
       return res.status(500).send("File upload error");
     }
 
-    // Access the uploaded file and other form data
-    const { professionalRole, applicationLetter } = req.body;
-    const cvFilePath = req.file ? req.file.path : null; // The uploaded file path
+    const { professionalRole, coverLetter } = req.body;
+    const cvFilePath = req.file ? req.file.path : null;
+
     if (cvFilePath) {
       console.log("CV File Path:", cvFilePath);
     }
 
-    // Validate and sanitize the input
     const { error, value } = inputValidation.validate(req.body);
+
     if (error) {
       console.error("Validation error:", error.details);
-      // Unlink the uploaded file
       if (req.file) {
         fs.unlinkSync(req.file.path);
       }
-      return res.sendFile(path.join(__dirname, "..", "views/404.html"));
+      return res.render("404");
     }
 
-    // Now you can process the uploaded file and form data as needed
-    console.log(professionalRole);
-    console.log(applicationLetter);
+    cronDaemon.schedule("* * * * *", async () => {
+      const now = new Date();
+
+      if (isFirstRun) {
+        const userEmail = req.session.isAuthenticated
+          ? req.session.userEmail
+          : req.session.passport.user;
+
+        await processEvent(userEmail, professionalRole, cvFilePath);
+        isFirstRun = false;
+      } else if (
+        !isFirstRun &&
+        now.getDate() % 15 === 0 &&
+        now.getHours() === 0 &&
+        now.getMinutes() === 0
+      ) {
+        const userEmail = req.session.isAuthenticated
+          ? req.session.userEmail
+          : req.session.passport.user;
+
+        await processEvent(userEmail, professionalRole, cvFilePath);
+      }
+    });
 
     // Respond to the client
     res.sendFile(path.join(__dirname, "..", "views/success.html"));
   });
 };
 
-module.exports = runAppEngine;
+module.exports = { runJobHome, runAppEngine };

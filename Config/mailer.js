@@ -10,7 +10,7 @@ const mailer = async (email, subject, msg, attachment) => {
   });
 
   const mailOptions = {
-    from: `[Purger App] <${process.env.User}@outlook.com>`,
+    from: `[Runjob] <${process.env.User}@outlook.com>`,
     to: email,
     subject: subject,
     html: msg,
@@ -30,6 +30,7 @@ const mailer = async (email, subject, msg, attachment) => {
         reject(err); // Reject the promise with the error
       } else {
         resolve(info); // Resolve the promise with the info object
+        console.log(`Email sent to ${email}`);
       }
     });
   });

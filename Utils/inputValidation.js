@@ -5,7 +5,7 @@ const runJobSchema = Joi.object({
     .trim() // Trim whitespace from the input
     .valid("frontend", "backend", "cloud", "devops", "FRONTEND", "BACKEND", "CLOUD", "DEVOPS") // Validate allowed values
     .required(),
-    applicationLetter: Joi.string().required(),
+    coverLetter: Joi.string().trim().allow('')
 });
 
 module.exports = runJobSchema;

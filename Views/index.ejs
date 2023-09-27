@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RunJob</title>
+    <!-- Include Font Awesome CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Philosopher&family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <style>
+      h2 {
+        font-family: "Philosopher", sans-serif;
+      }
+      label,
+      li,
+      p {
+        font-family: "Roboto Mono", monospace;
+      }
+      footer {
+        margin-top: 20px;
+        padding-bottom: 50px;
+      }
+      li {
+        margin-bottom: 10px;
+      }
+      .nav {
+        padding-bottom: 60px;
+      }
+      .toggle-button {
+        position: absolute;
+        top: 22px;
+        right: 60px;
+      }
+      .dark-mode {
+        background-color: #222;
+        color: #f4f7f8;
+      }
+      .feature-list li {
+        margin-bottom: 10px;
+      }
+      .card:hover {
+       transform: scale(1.08); /* Increase scale on hover */
+       transition: transform 0.3s ease; /* Add transition effect */
+       box-shadow: 1px 1px 0;
+      }
+      .feature-list b {
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light nav">
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <button
+                id="toggleMode"
+                class="btn btn-sm btn-outline-secondary toggle-button"
+              >
+                Toggle Mode
+              </button>
+            </li>
+          </ul>
+        </div>
+        <% if (flashMessages && flashMessages.success) { %>
+        <div
+          class="alert alert-success alert-dismissible fade show position-absolute top-0 end-0 mt-3 me-3"
+          role="alert"
+        >
+          <%= flashMessages.success %>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        <% } %>
+      </div>
+    </nav>
+    <div class="container mt-4">
+      <div class="d-flex justify-content-center align-items-center">
+        <img
+          src="https://res.cloudinary.com/dcoxo8snb/image/upload/v1692001437/b80cdc09-9bbc-48e1-8539-0d5689dff0fe_ni3f32.gif"
+          alt="Job Scraping Web App"
+          class="img-fluid"
+        />
+        <div class="ms-4">
+          <h2 class="text-primary">Welcome to RunJob!</h2>
+          <h5 style="line-height: 30px">
+            Congratulations on taking the first step towards a smarter and more
+            efficient job search. With RunJob, your job application process just
+            got a whole lot easier and more effective.
+          </h5>
+        </div>
+      </div>
+      <br />
+
+      <!-- Add this code for pricing selection -->
+      <h5 class="mt-5 text-center pb-2" id="pricingSelection">
+        Our Pricing Options:
+      </h5>
+      <p class="text-center pb-4">
+        Explore the categories below to find the perfect subscription plan for
+        you. By uploading your CV, you'll unlock the full potential of
+        personalized job applications tailored to your unique skills and
+        preferences. This personalized approach ensures you're matched with
+        opportunities that align with your career goals and aspirations.
+      </p>
+      <div class="row pricing justify-content-center" style="margin-right:12px;">
+        <!-- Free Package Card -->
+        <div class="col-md-4">
+          <div
+            class="card mb-4 border-info"
+            style="
+              width: 18rem;
+              box-shadow: 1px 1px 0;
+              height: 300px;
+              cursor: pointer;
+            "
+            data-toggle="modal"
+            data-target="#freePackageModal"
+            id="freePackageCard"
+          >
+            <div
+              class="card-body d-flex flex-column justify-content-center align-items-center"
+            >
+              <i class="fa fa-cogs fa-3x mb-3 text-info" aria-hidden="true"></i>
+              <h5
+                class="card-title pricing-option text-info"
+                data-target="freePackage"
+              >
+                Free Category
+              </h5>
+              <p class="card-text text-center">
+                Receive up to 2 CV-personalized job details per month
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Premium Package Card -->
+        <div class="col-md-3">
+          <div
+            class="card mb-4 border-primary"
+            style="width: 18rem; height: 300px; box-shadow: 1px 1px 0; cursor: pointer"
+          >
+            <div
+              class="card-body d-flex flex-column justify-content-center align-items-center"
+            >
+              <i
+                class="fa fa-star fa-3x mb-3 text-danger"
+                aria-hidden="true"
+              ></i>
+              <h5
+                class="card-title text-primary pricing-option text-center"
+                data-target="premiumPackage"
+              >
+                Premium Category - $3/month
+              </h5>
+              <p class="card-text text-center">
+                Receive up to 25 CV-personalized job details per month +  Added tooltips
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="mt-5 text-center pt-3 pb-3 border-top border-silver">
+        How RunJob Revolutionizes Your Job Application Process:
+      </h5>
+      <ul class="feature-list pb-4">
+        <li>
+          <b>Scraping Power:</b> Utilizing your specified professional role,
+          RunJob scours the web, aggregating the latest job opportunities from
+          various companies and organizations.
+        </li>
+        <li>
+          <b>Personalization:</b> We understand that every job application is
+          unique. RunJob tailors your cover letter and CV to precisely match the
+          specific requirements of the positions you're applying for.
+        </li>
+        <li>
+          <b>Maximized Opportunities:</b> With RunJob, you're not confined to a
+          single platform. We explore multiple job sites daily to guarantee you
+          have access to a diverse range of job opportunities.
+        </li>
+        <li>
+          <b>Enhanced CV:</b> Our technology optimizes your CV to spotlight your
+          pertinent skills and experiences, ensuring you stand out from the
+          crowd.
+        </li>
+        <li>
+          <b>CV Refinement:</b> RunJob helps you refine your CV based on
+          specific job roles, providing an additional layer of guidance to boost
+          your chances of success.
+        </li>
+        <li>
+          <b>Email Notifications:</b> Receive email notifications with detailed
+          job information and direct application links, streamlining your job
+          application process.
+        </li>
+      </ul>
+
+      <!-- Add a modal container -->
+      <div
+        class="modal fade"
+        id="freePackageModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="freePackageModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-primary" id="freePackageModalLabel">
+                Free Category
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Add your form here -->
+              <form
+                class="mb-5 mt-2"
+                enctype="multipart/form-data"
+                method="post"
+                action="/runjob/runappv1"
+              >
+                <div>
+                  <div class="mb-5 flex-grow-1">
+                    <label for="professionalRole" class="form-label text-dark"
+                      ><b>Professional Role</b></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="professionalRole"
+                      name="professionalRole"
+                      placeholder="Enter your role (e.g frontend, cloud)"
+                      required
+                    />
+                  </div>
+                  <div class="mb-5 flex-grow-1">
+                    <label for="coverLetter" class="form-label text-dark"
+                      ><b>Cover Letter</b>(optional)</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="coverLetter"
+                      name="coverLetter"
+                      rows="2"
+                      placeholder="Paste your cover letter here (Please make sure it's thoroughly proof-read)"
+                    ></textarea>
+                  </div>
+                  <div class="mb-4 flex-grow-1">
+                    <label for="cv" class="form-label text-dark"><b>Upload CV</b></label>
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="cv"
+                      name="cv"
+                      accept=".pdf,.doc,.docx"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <button
+                    type="submit"
+                    class="btn"
+                    style="background-color: #0c62db; color: white"
+                  >
+                    Run Application
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-white py-5" style="background-color: rgb(31, 30, 30)">
+      <div class="container text-center">
+        <div class="mb-3">
+          <a href="#" class="text-white me-3"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a href="#" class="text-white me-3"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a href="#" class="text-white me-3"><i class="fab fa-github"></i></a>
+          <a href="#" class="text-white me-3"
+            ><i class="fab fa-linkedin"></i
+          ></a>
+        </div>
+        <p class="mb-4">
+          Made with <span class="text-danger">&#10084;&#65039;</span> by
+          <a
+            href="https://www.linkedin.com/in/israel-abazie/"
+            class="text-white"
+            target="_blank"
+            >Israel Abazie</a
+          >
+        </p>
+        <p class="mb-0">
+          &copy; Copyright JobRun Technology 2023, All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Validation Error Modal -->
+    <div
+      class="modal fade text-dark"
+      id="validationErrorModal"
+      tabindex="-1"
+      aria-labelledby="validationErrorModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="validationErrorModalLabel">
+              Validation Error
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex align-items-center">
+              <span class="fs-1 me-2 text-danger"
+                ><i class="fas fa-exclamation-circle"></i
+              ></span>
+              <p class="mb-0">
+                Professional Role entries must be either frontend, backend,
+                cloud, or devops.
+              </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const freePackageCard = document.getElementById("freePackageCard");
+        const freePackageModal = new bootstrap.Modal(
+          document.getElementById("freePackageModal")
+        );
+
+        freePackageCard.addEventListener("click", function () {
+          freePackageModal.show();
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const alertElements = document.querySelectorAll(".alert");
+
+        alertElements.forEach(function (alertElement) {
+          setTimeout(function () {
+            alertElement.style.display = "none";
+          }, 5000); // Hide the alert after 10 seconds (10000 milliseconds)
+        });
+      });
+      // Track changes to professional role field and trigger modal on mouse-out
+      const professionalRoleInput = document.getElementById("professionalRole");
+      professionalRoleInput.addEventListener("change", function () {
+        console.log(professionalRoleInput.value);
+        const enteredRole = professionalRoleInput.value.toLowerCase();
+        const allowedRoles = ["frontend", "backend", "cloud", "devops"];
+
+        if (!allowedRoles.includes(enteredRole)) {
+          const validationErrorModal = new bootstrap.Modal(
+            document.getElementById("validationErrorModal")
+          );
+          validationErrorModal.show();
+        }
+      });
+      // Toggle dark mode on button click
+      const toggleModeButton = document.getElementById("toggleMode");
+      toggleModeButton.addEventListener("click", function () {
+        const isDarkMode = document.body.classList.contains("dark-mode");
+        if (isDarkMode) {
+          document.body.classList.remove("dark-mode");
+          localStorage.setItem("darkMode", "false"); // Store the value in local storage as a string
+        } else {
+          document.body.classList.add("dark-mode");
+          localStorage.setItem("darkMode", "true"); // Store the value in local storage as a string
+        }
+      });
+
+      // Check if dark mode is stored in local storage
+      const isDarkModeStored = localStorage.getItem("darkMode") === "true"; // Compare with the string 'true'
+      if (isDarkModeStored) {
+        document.body.classList.add("dark-mode");
+      }
+    </script>
+  </body>
+</html>
